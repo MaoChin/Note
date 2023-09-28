@@ -118,7 +118,7 @@ getrange key 0 3
 若`key`不存在，就自动生成一个`value`，把`offset`之前的内容填充成 0x00
 
 ```shell
-# setrange key offset value
+# setrange key offset value 
 setrange key 3 "aaa"   # 3 是下标(从0计算)
 ```
 

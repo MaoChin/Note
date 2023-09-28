@@ -12,7 +12,7 @@ git config --global user.email "13040588581@163.com"
 git config --global credential.helper store
 ```
 
- ## 3. 配置`SSH`
+ ## 3. 配置`SSH--windows`
 
 `git clone` 等命令有两种链接方式：`https`和`ssh`，用`ssh`更方便一些。
 
@@ -42,9 +42,28 @@ Host github.com
 
 测试：
 
-```
+```shell 
 ssh -T git@github.com
-// 返回如下就可以了
+# 返回如下就可以了
+Hi xxxxx! You've successfully authenticated, but GitHub does not
+provide shell access.
+```
+
+## 4. 配置`SSH--windows`
+
+先生成公钥。
+
+```shell
+ssh-keygen -t rsa -C "13040588581@163.com"	
+```
+
+然后在`~/.ssh/id_rsa.pub`里存放的就是公钥，复制到`github`即可。
+
+测试：
+
+```shell
+ssh -T git@github.com
+# 返回如下就可以了
 Hi xxxxx! You've successfully authenticated, but GitHub does not
 provide shell access.
 ```
