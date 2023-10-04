@@ -265,6 +265,41 @@
 1. `radio`单选中**多个选项必须配有相同的`name`值才能实现单选，**`checked="checked"`表示这是默认选项。
 2. `submit`标签 把用户输入的course以URL传到action的页面。
 
+#### 3. `label`标签
+
+搭配 input 使用，点击 label 也能选中对应的单选/复选框，能够提升用户体验。
+
+for 属性: 指定当前 label 和哪个相同 id 的 input 标签对应. (此时点击才是有用的)  
+
+```html
+<label for="male">男</label> 
+<input id="male" type="radio" name="sex">
+```
+
+#### 4. `select`标签
+
+下拉菜单选择。
+
+```html
+<select>
+<option>--请选择年份--</option>
+<option>1991</option>
+<option>1992</option>
+<option>1993</option>
+<option>1994</option>
+<option>1995</option>
+</select>
+```
+
+#### 5. `textarea`标签
+
+```html
+<textarea rows="3" cols="50">
+</textarea>
+```
+
+
+
 ### 10. 无语义标签
 
 就是没有固定语义，主要用于==网页布局。==
