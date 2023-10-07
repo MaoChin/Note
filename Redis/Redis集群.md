@@ -6,8 +6,6 @@
 
 `redis`的集群：`redis`提供的集群模式，主要是为了解决存储空间不足的问题。
 
-
-
 ## 1. 基本概念
 
 `redis`哨兵只是提高了可用性，但是**所有的数据**还是要存储在主节点和从节点中(内存中！！)，当数据量非常大时，会导致存储空间不足的问题。(内存毕竟是有限的)
@@ -82,11 +80,113 @@ hash_slot = crc16(key) % 16384
 
 ### 1. 认识`shell`脚本(`xxx.sh`)
 
+把多条`shell`命令写到一个文件里，批量化执行。并且还支持分支，循环，函数等，这样就可以进行比较复杂的命令编写了。
 
+**对于多个类似的操作可以编写脚本去完成，这样更方便快捷，并且可以重复使用。**
 
+`shell`脚本要求把所有的代码写到一行，但是这样不方便看，所以使用很多续行符 \ 。
 
+```bash 
+# seq是shell命令，表示生成 [1,9]
+for port in $(seq 1 9); \ # 这个 \ 是续行，就是下一行的内容和这一行合并。
+do \                      # do .... done 表示代码块
+mkdir -p redis${port}/    # shell中 {} 中的是变量
+touch redis${port}/redis.conf
+cat << EOF > redis${port}/redis.conf
+port 6379
+bind 0.0.0.0
+protected-mode no
+appendonly yes                         # 开启AOF持久化
+cluster-enabled yes                    # 开启集群
+cluster-config-file nodes.conf         # 集群配置文件,自动生成
+cluster-node-timeout 5000              # 集群间心跳包超时时间
+cluster-announce-ip 172.30.0.10${port} # 节点ip(容器内)
+cluster-announce-port 6379           # 节点port(容器内)，业务端口,提供服务
+cluster-announce-bus-port 16379      # 管理端口,完成一些管理上的任务
+EOF
+done
 
+# 注意 cluster-announce-ip 的值有变化.
+for port in $(seq 10 11); \
+do \
+mkdir -p redis${port}/
+touch redis${port}/redis.conf
+cat << EOF > redis${port}/redis.conf
+port 6379
+bind 0.0.0.0
+protected-mode no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+cluster-announce-ip 172.30.0.1${port}
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+EOF
+done
+```
 
+执行脚本：`bash xxx.sh`
+
+### 2.` docker-compose.yml`
+
+==注意网络配置。网段的划分要是内网`ip`：==
+
+1. **10.***
+2. **172.16.* ~ 172.31.***
+3. **192.168.***
+
+### 3. 启动容器与构建集群
+
+```shell
+docker-compose up -d  # -d 表示后台启动
+```
+
+```shell
+redis-cli --cluster create 172.30.0.101:6379 ...(所有的ip:port) 
+	--cluster-replicas 2 (表示一个主节点配两个从节点)
+```
+
+```shell
+# 这些节点构成了一个集群，所以连接不同的节点本质上是一样的
+# -c：有可能设置/获取的key不在这个连接的分片上！！而在其他的分片上，-c 选项就可以自动把请求重定向到对应的分片上。
+redis-cli -h 172.30.0.101 -p 6379 -c
+cluster nodes  # 查看集群信息
+```
+
+集群中某个主节点宕机之后的**处理结果**和前面的哨兵模式是一样的，都是挑选一个从节点上位，担任主节点。但是具体的实现细节和哨兵模式不一样：
+
+**集群中没有哨兵节点一说，而是集群中的每一个节点都承担了哨兵的任务！！**大家互相监控。发现某个主节点宕机后其所属的从节点进行短暂的休眠后会进行拉票，但是只有主节点可以投票，先休眠结束的那个从节点一般就会晋升为主节点，自己执行`slave no one`，然后让其他的从节点直行`slave ip port`认主。
+
+以下三种情况会被视为==整个集群挂了==：
+
+1. 某个分片的所有主从节点全部宕机。
+2. 某个分片的主节点挂了，但是没有从节点。
+3. 超过一半的主节点挂了。
+
+### 4. 集群扩容与缩容
+
+扩容就是引入更多的机器，存储更多的数据。
+
+==集群扩容的风险较高，成本也较大！！所以一般不会频繁扩容。==
+
+#### 1. 添加新的主节点
+
+```shell
+ redis-cli --cluster add-node 172.30.0.110:6379 172.30.0.101:6379
+```
+
+#### 2. 重新分配`slots`
+
+```shell
+redis-cli --cluster reshard 172.30.0.101:6379  # 集群中的任意节点ip:port
+```
+
+#### 3. 给新的主节点添加从节点
+
+```shell
+redis-cli --cluster add-node 172.30.0.111:6379 172.30.0.101:6379 --cluster-slave
+```
 
 
 
