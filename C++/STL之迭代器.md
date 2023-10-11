@@ -8,7 +8,7 @@
 4. 双向迭代器
 5. 随机访问迭代器
 
-另外还有一种**插入迭代器**，也是一种输出迭代器，可以在迭代器的位置插入数据。插入迭代器有三类：`front_insert_iterator`(头插)，`back_insert_iterator`(尾插)，`insert_iterator`(在区间的指定位置之前插入)。
+另外还有一种**插入迭代器**，也是一种输出迭代器(==输出型参数==)，可以在迭代器的位置插入数据。插入迭代器有三类：`front_insert_iterator`(头插)，`back_insert_iterator`(尾插)，`insert_iterator`(在区间的指定位置之前插入)。
 
 使用标准库提供的函数可以构造上述三个插入迭代器。
 
