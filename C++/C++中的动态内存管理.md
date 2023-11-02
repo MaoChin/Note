@@ -56,13 +56,17 @@ int main()
 
 ### 2. 重载`operator new` 和 `operator delete`函数
 
-一般情况下不需要对 `operator new` 和 `operator delete`进行重载，除非在申请和释放空间的时候有某些特殊的需求。比如：在使用`new`和`delete`申请和释放空间时，打印一些日志信息。
+一般情况下不需要对 `operator new` 和 `operator delete`进行重载，除非在申请和释放空间的时候有某些特殊的需求。比如：在使用`new`和`delete`申请和释放空间时，**打印一些日志信息**，或者**使用内存池分配空间**，不需要`operator new`直接访问堆。
 
 ### 3. `new`和`delete`的实现原理
 
 `new`：先调用 `operator new`申请空间(`operator new`又调用`malloc` )，**然后对于自定义类型会调用它的构造函数初始化。**
 
+![image-20231101164050189](E:\Note\C++\C++中的动态内存管理.assets\image-20231101164050189.png)
+
 `delete`：**对于自定义类型先调用其析构函数释放资源**，然后调用 `operator delete`函数释放空间(`operator delete`又调用 `free`)。
+
+![image-20231101164111121](E:\Note\C++\C++中的动态内存管理.assets\image-20231101164111121.png)
 
 `new [N]`：先调用 `operator new[]`申请空间(`operator new[]`调用`operator new` )，然后对于自定义类型会调用`N`次它的构造函数初始化。
 
@@ -105,7 +109,7 @@ int main()
 }
 ```
 
-## 6. `malloc/free` 和`new/delete`的区别
+## 6. `malloc/free` 和`new/delete`的区别(面试题)
 
 1. `malloc/new`是**函数调用**，而`new/delete`是**关键字**。
 2. `new`申请空间可以进行初始化。(不过`calloc`也可以)
@@ -135,9 +139,9 @@ int main()
 
 ## 7. 内存泄漏
 
-一般又两类内存泄漏：
+一般有两类内存泄漏：
 
-1. 动态申请的内存空间没有释放。
+1. 动态申请的内存空间没有释放，指向这块内存的指针丢了。
 2. 申请的==系统资源没有释放==！如文件描述符`fd`，网络套接字`socketfd`等。
 
 避免内存泄漏：

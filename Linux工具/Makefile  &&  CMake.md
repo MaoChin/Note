@@ -56,11 +56,47 @@ clean:
 
 伪目标总是被执行的，可以避免 目标的取名和当前路径下的文件或文件夹重名而导致命令不被执行。
 
+## 4. 变量的定义和使用
 
+```makefile
+cpp := src/main.cpp 
+obj := objs/main.o
 
+# ()和{}都可以 
+$(obj) : ${cpp}
+	@g++ -c $(cpp) -o $(obj)
 
+compile : $(obj)
 
+# make compile命令即可
+# make clean, make compile, make debug 很常用
+```
 
+- `$@`: 目标(target)的完整名称
+- `$<`: 第一个依赖文件（`prerequisties`）的名称
+- `$^`: 所有的依赖文件（`prerequisties`），以空格分开，不包含重复的依赖文件
+
+## 5. 运算符
+
+1. =   简单赋值，变量赋值后也可以更改
+2. :=  立即赋值，变量赋值后无法更改
+3. ?=  尝试赋值，变量已经定义了就步进行任何操作，变量未定义时才进行赋值。
+4. +=  累加
+5.  \    续行
+6.  `*`   通配符
+7.  %   通配符，并将匹配到的字符串作为变量使用。
+
+## 6. 常用函数
+
+使用方式：(或者用 {} 也可以)
+
+```makefile
+$(funcname argument argument ...)
+```
+
+1. `shell`  可以在`makefile`里使用`bash`命令
+2. `subst`  字符串替换
+3. `patsubst`   模式字符串替换，就是可以使用通配符进行描述
 
 
 
