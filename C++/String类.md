@@ -39,7 +39,7 @@
 | `operator[]` （重点) | 返回pos位置的字符                                            |
 | `begin`，`end `      | begin获取第一个字符的迭代器，end获取最后一个字符下一个位置的迭代器。==前闭后开== |
 | `rbegin`，` rend `   | 反向迭代器                                                   |
-| 范围 `for `          | C++11支持更简洁的范围for的新遍历方式                         |
+| 范围 `for `          | C++11支持的更简洁的范围for遍历方式，底层就是迭代器！         |
 
 ==迭代器有正向/反向，`const`/非`const`的区分。==
 
@@ -77,7 +77,7 @@
 static const size_t npos = -1;
 ```
 
-## 4. `VS`系列和`g++`的`string`类的结构
+## 4. `VS`系列和`g++`中`string`类的结构
 
 ### 1. `VS`系列
 
@@ -89,9 +89,72 @@ static const size_t npos = -1;
 
 ## 5. `string`类的模拟实现
 
+### 1. 深浅拷贝
 
+==当类成员变量有在堆上动态开辟空间存值时，拷贝构造就必须要是自己写的深拷贝！！==编译器生成的那个默认拷贝构造就不行了！会有内存问题---**两个对象中的成员变量指向了同一块堆空间！！**
 
+1. 其中一个对象对其作了改变会影响另一个。
+2. **两个对象销毁时都会调用析构函数，释放两次同一块空间**，就会报错！！
 
+![image-20231016171607020](E:\Note\C++\string类.assets\image-20231016171607020.png)
+
+**所以当类中有维护动态开辟的空间时，其==拷贝构造，赋值重载，析构==都要自己显示的实现，并且要以==深拷贝==的形式实现。**
+
+### 2. 拷贝构造和赋值重载的现代写法
+
+#### 1. 一般写法
+
+```C++
+class String
+{
+public:
+	// ...
+  // 拷贝构造
+  String(const String& s)
+  	: _str(new char[strlen(s._str) + 1])
+  {
+  	strcpy(_str, s._str);
+  }
+  // 赋值重载
+  String& operator=(const String& s)
+  {
+    // 先开空间
+    char* pStr = new char[strlen(s._str) + 1]; // \0
+    strcpy(pStr, s._str);
+    delete[] _str;
+    _str = pStr;
+  }
+  // ...
+};
+```
+
+#### 2. 现代写法
+
+```C++
+class String
+{
+public:
+	// ...
+  // 拷贝构造
+  String(const String& s)
+  	: _str(new char[strlen(s._str) + 1])
+  {
+  	strcpy(_str, s._str);
+  }
+  // 赋值重载
+  String& operator=(const String& s)
+  {
+    // 先开空间
+    char* pStr = new char[strlen(s._str) + 1]; // \0
+    strcpy(pStr, s._str);
+    delete[] _str;
+    _str = pStr;
+  }
+  // ...
+};
+```
+
+## 3. 写时拷贝和引用计数
 
 
 
