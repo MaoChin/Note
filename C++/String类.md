@@ -43,7 +43,7 @@
 
 ==迭代器有正向/反向，`const`/非`const`的区分。==
 
-### 4. 修改操作
+### 4. 增删查改
 
 | 函数名称              | 功能说明                                                   |
 | --------------------- | ---------------------------------------------------------- |
@@ -68,6 +68,12 @@
 | `getline` （重点）              | ==获取一行字符串，包括空格。==           |
 | `relational operators` （重点） | 大小比较                                 |
 
+### 6. 其他常用函数
+
+字符串转整型：`stoi`
+
+整型转字符串：`to_string`
+
 ## 3. `npos`
 
 `string`类的一个静态成员变量：
@@ -77,17 +83,9 @@
 static const size_t npos = -1;
 ```
 
-## 4. `VS`系列和`g++`中`string`类的结构
-
-### 1. `VS`系列
 
 
-
-### 2. `g++`
-
-
-
-## 5. `string`类的模拟实现
+## 4. `string`类的模拟实现
 
 ### 1. 深浅拷贝
 
@@ -118,17 +116,23 @@ public:
   // 赋值重载
   String& operator=(const String& s)
   {
-    // 先开空间
-    char* pStr = new char[strlen(s._str) + 1]; // \0
-    strcpy(pStr, s._str);
-    delete[] _str;
-    _str = pStr;
+    if(this != &s)
+    {
+      // 先开空间
+      char* pStr = new char[strlen(s._str) + 1]; // \0
+      strcpy(pStr, s._str);
+      delete[] _str;
+      _str = pStr;
+    }
+		return *this;
   }
   // ...
 };
 ```
 
-#### 2. 现代写法
+#### 2. 现代写法(==重点==)
+
+思想就是不自己开空间，而是去复用构造/拷贝构造完成，自己只`swap`一下就行了。
 
 ```C++
 class String
@@ -137,38 +141,41 @@ public:
 	// ...
   // 拷贝构造
   String(const String& s)
-  	: _str(new char[strlen(s._str) + 1])
+  	: _str(nullptr)
   {
-  	strcpy(_str, s._str);
+    // 复用构造函数
+    string strTmp(s._str);
+  	swap(_str, strTmp._str);
   }
-  // 赋值重载
-  String& operator=(const String& s)
+  // 赋值重载，这里不传引用了，直接传值，完成了拷贝构造
+  String& operator=(String s)
   {
-    // 先开空间
-    char* pStr = new char[strlen(s._str) + 1]; // \0
-    strcpy(pStr, s._str);
-    delete[] _str;
-    _str = pStr;
+		swap(_str, s._str);
+    return *this;
+    // 出了函数作用域后对象销毁会自动调用析构函数把s._str的空间释放掉。
   }
   // ...
 };
 ```
 
-## 3. 写时拷贝和引用计数
+### 3. 迭代器
 
+`string`的迭代器就是原生指针。
 
+```C++
+class string
+{
+  typedef char* iterator;
+  typedef const char* const_iterator;
+  // ...
+};
+```
 
+## 5. 写时拷贝和引用计数(了解)
 
+进行深拷贝时先不拷贝，而是进行浅拷贝，但是==维护一个变量记录有几个对象指向我这块空间---引用计数==！当一个对象销毁时看引用计数是不是1，==是1才真正把这块空间释放掉==，否则就把引用计数减1，而不释放空间。简单来说就是最后一个析构的对象才真正释放资源。
 
-
-
-
-
-
-
-
-
-
+但是这样会有线程安全问题，就是多个对象指向了同一块资源！其中一个改变了这块资源其他的对象都会跟着改变。此时可以写时拷贝，==当某一个对象那个要写资源时再给这个对象进行深拷贝。==
 
 
 
