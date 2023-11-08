@@ -165,10 +165,19 @@ public:
 ```C++
 class string
 {
+public:
   typedef char* iterator;
   typedef const char* const_iterator;
   // ...
+
+private:
+  char* str_;
+  size_t size_;
+  size_t capacity_;
+  
+  const static size_t npos;
 };
+const size_t string::npos = -1;
 ```
 
 ## 5. 写时拷贝和引用计数(了解)

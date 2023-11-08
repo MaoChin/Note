@@ -1,4 +1,4 @@
-# `vector`
+# `	vector`
 
 C++常用的几个技术：仿函数，`lambda`表达式，包装器。
 
@@ -54,12 +54,37 @@ C++常用的几个技术：仿函数，`lambda`表达式，包装器。
 
 在`string`，`vector`这种==连续空间存储==的容器中，非常容易发生迭代器失效！如：
 
-1. 底层空间改变，如扩容(`resize、reserve、insert、assign、push_back`)等操作。
-2. 底层空间没变，但是当前迭代器指向位置的值已经被删除了！如`erase`操作。
+1. 底层空间改变，如扩容(`resize、reserve、insert、assign、push_back`)等操作，会**导致所有的数据存储到了新的空间，但这时有可能有其他的迭代器指向原来的空间！！**就会导致==野指针==问题。
+2. 底层空间没变，但是当前**迭代器指向位置的值已经被删除或者被改变**了！如`erase`，`insert`操作。不会导致野指针问题，但是迭代器指向位置的意义改变了。
 
 
 
 ## 3. `vector`模拟实现
+
+### 1. 迭代器
+
+和`string`一样，`vector`的迭代器也是原生指针。
+
+```C++
+template<class T>
+class vector{
+public:
+	typedef T* iterator;
+  typedef const T* const_iterator;
+  // ...
+  
+private:
+  iterator start_;
+  iterator finish_;
+  iterator end_of_storage_;
+};
+```
+
+
+
+
+
+
 
 
 
