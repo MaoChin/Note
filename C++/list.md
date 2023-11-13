@@ -31,22 +31,22 @@
 
 ### 4. 增删改查
 
-| 函数声明   | 接口说明                                  |
-| ---------- | ----------------------------------------- |
-| push_front | 在list首元素前插入值为`val`的元素         |
-| pop_front  | 删除list中第一个元素                      |
-| push_back  | 在list尾部插入值为`val`的元素             |
-| pop_back   | 删除list中最后一个元素                    |
-| insert     | 在list position 位置中插入值为`val`的元素 |
-| erase      | 删除list position位置的元素               |
-| swap       | 交换两个list中的元素                      |
-| clear      | 清空list中的有效元素                      |
+| 函数声明     | 接口说明                                  |
+| ------------ | ----------------------------------------- |
+| `push_front` | 在list首元素前插入值为`val`的元素         |
+| `pop_front`  | 删除list中第一个元素                      |
+| `push_back`  | 在list尾部插入值为`val`的元素             |
+| `pop_back`   | 删除list中最后一个元素                    |
+| `insert`     | 在list position 位置中插入值为`val`的元素 |
+| `erase`      | 删除list position位置的元素               |
+| `swap`       | 交换两个list中的元素                      |
+| `clear`      | 清空list中的有效元素                      |
 
 ## 2. `list`迭代器失效
 
 `list`每个节点并==不是连续存储==的，所以不会涉及到扩容操作，也就==不会导致因底层空间改变而造成的野指针问题(第一类迭代器失效)。==
 
-但是当插入删除时还是会导致第二类迭代器失效：==插入元素时有可能会导致迭代器指向的节点不是原来所指向的节点了；删除元素时指向该元素的迭代器失效(野指针)！==
+但是当删除节点时还是会导致第二类迭代器失效：==删除元素时指向该元素的迭代器失效(野指针)！==
 
 
 
@@ -57,11 +57,12 @@
 `list`的迭代器就不是原生指针了！！而是自己封装的自定义类型，然后使用运算符重载完成各种操作，使得迭代器的使用==像指针一样==。
 
 ```C++
-template<class T>
+// 后面两个参数做到了进一层的抽象，实现了代码的复用！牛逼！
+template<class T, class Ref, class Ptr> 
 struct __list_iterator
 {
 	typedef list_node<T> Node;
-  typedef __list_iterator<T> self;
+  typedef __list_iterator<T, Ref, Ptr> self;
   // 成员就是指向节点的指针！
   Node* node_;
   
@@ -70,12 +71,12 @@ struct __list_iterator
   {}
   
   // 重载 * 运算符(解引用)
-  T& operator*()
+  Ref operator*()
   {
   	return node_->data_;  
   }
   // 重载 -> 运算符 (这个运算符返回对象的地址，使用时应该再加一个->,但是为了可读性，可以不加后面的->,编译器会自动添加)
-  T* operator->()
+  Ptr operator->()
   {
     return &(operator*());
   } 
@@ -109,8 +110,18 @@ class list
 {
 public:
   // 迭代器是自己实现的类！！不是原生指针！
-  typedef __list_iterator<T> iterator;	
+  typedef __list_iterator<T, T&, T*> iterator;
+  // 通过添加两个模板参数，达到灵活控制const和非const的区别！
+  typedef __list_iterator<T, const T&, const T*> const_iterator;
   
+  const_iterator begin() const
+  {
+    // ...
+  }
+  const_iterator end() const
+  {
+    // ...
+  }
   iterator begin()
   {
     // ...
