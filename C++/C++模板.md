@@ -4,7 +4,7 @@
 
 ## 1. 理解泛型编程
 
-泛型编程就是编写==与类型无关的通用型代码==，是代码复用的一种手段，`C++`中模板是实现泛型编程的一种手段。
+泛型编程就是编写==与类型无关的通用型代码==，是代码复用的一种手段，`C++`中模板是实现泛型编程的一种手段。(通过模板达到对==参数类型==的控制，通过模板达到对==逻辑==的控制。)
 
 ## 2. 函数模板
 
@@ -77,7 +77,41 @@ vector<int> s1;
 vector<double> s2;
 ```
 
-## 4. 非类型模板参数
+#### ==取类模板内的类型==
+
+==在类模板没有实例化之前不能使用类模板里定义的类型！==因为类模板没有实例化，它里面的类型也是**虚拟类型**，**编译器无法确定其具体类型**，导致后期无法处理！
+
+```C++
+template<class Container>
+void printContainer(const Container& container)
+{
+  // 不行！Container类模板没有实例化之前它里面的类型是虚拟类型，
+  // 编译器无法确定其具体类型
+  // Container::const_iterator cit = contianer.begin();
+  // 加 typename 修饰告诉编译器，等类模板实例化后再去获取类型！就可以了
+  typename Container::const_iterator cit = contianer.begin();
+  while(cint != container.end())
+  {
+    cout << *cit << " ";
+    ++cit;
+  }
+  cout << endl;
+}
+
+int main()
+{
+  list<int> lt;
+  lt.push_back(1);
+  lt.push_back(2);
+  lt.push_back(3);
+  lt.push_back(4);
+  printContainer(lt);
+}
+```
+
+这时在该虚拟类型前==加 `typename` 修饰==，告诉编译器这是一个虚拟类型，等到类模板实例化后再去获取具体的类型。
+
+## 4. 非类型模板参数	
 
 模板参数分为==类型模板参数和非类型模板参数==。类型模板参数就是普通的在 `class/typename`后面的参数，由调用方指定参数类型，也可以给缺省值。而==非类型模板参数就是用一个常量作为参数==，
 

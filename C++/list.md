@@ -136,6 +136,101 @@ private:
 };
 ```
 
+###### ==反向迭代器==
+
+反向迭代器是一种**适配器模式**！！它的底层就是正向迭代器，==通过对正向迭代器的包装适配得到反向迭代器。==实现了代码复用！
+
+因为反向迭代器除了 `++, --`操作，其他基本和正向迭代器一模一样！并且牛逼的是，这个反向迭代器**并不是每一个容器都要自己封装适配正向迭代器，而是在一个文件中(`stl_iterator.h`)统一实现**，这样只要给我正向迭代器我就能适配出对应的反向迭代器，而不去关心是哪一个容器的迭代器(==泛型编程==)！
+
+```C++
+// 反向迭代器---适配器
+// 和正向迭代器一样，这里传三个模板参数也是为了控制const和非const。
+// 但是SGI版本的STL通过 迭代器萃取 的技术使得模板参数只给一个正向迭代器也可以！
+template<class Iterator, class Ref, class Ptr>
+struct ReverseIterator
+{
+  Iterator _it;
+  typedef ReverseIterator<Iterator, Ref, Ptr> Self;
+  
+  ReverseIterator(Iterator it)
+    :_it(it)
+  {}
+  Ref operator*()
+  {
+    // 为了对称，反向迭代器的begin()是正向迭代器的end()，反向迭代器的end()是
+    // 正向迭代器的begin(),但是正常来说应该错一个！所以这里 返回 *(--tmp)
+    Iterator tmp(_it);
+    return *(--tmp);
+  }
+  Ptr operator->()
+  {
+    return &(operator*());
+  }
+  Self& operator++()
+  {
+    // ++ 就是 --
+    --_it;
+    return *this;
+  }
+    Self& operator--()
+  {
+    // -- 就是 ++
+    ++_it;
+    return *this;
+  }
+  bool operator==(const self& it) const
+  {
+    return _it == it._it;
+  }
+  bool operator!=(const self& it) const
+  {
+    return !(this == it);
+  }
+};
+
+template<class T>
+class list
+{
+public:
+  // 迭代器是自己实现的类！！不是原生指针！
+  typedef __list_iterator<T, T&, T*> iterator;
+  // 通过添加两个模板参数，达到灵活控制const和非const的区别！
+  typedef __list_iterator<T, const T&, const T*> const_iterator;
+  
+  // 反向迭代器
+  typedef ReverseIterator<iterator, T&, T*> reverse_iterator;
+  typedef ReverseIterator<const_iterator, const T&, const T*>
+     const_reverse_iterator; 
+  
+  const_reverse_iterator rbegin() const
+  {
+    // 正向的end()就是反向的 begin()，错了一位
+    // 只是在SGI版本是这样的，其他版本可能不一样
+    return const_reverse_iterator(end());
+  }
+  const_reverse_iterator rend() const
+  {
+    // 正向的begin()就是反向的end()
+    return const_reverse_iterator(begin());
+  }
+  reverse_iterator rbegin()
+  {
+    return reverse_iterator(end());
+  }
+  reverse_iterator rend()
+  {
+    return reverse_iterator(begin());
+  }
+  
+private:
+  // ...
+};
+```
+
+###### ==迭代器萃取==
+
+
+
 ## 4. `list`和`vector`的比较
 
 
