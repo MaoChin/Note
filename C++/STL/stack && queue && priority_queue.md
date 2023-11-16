@@ -57,7 +57,7 @@
 
 实际上，`stack`和`queue`底层默认使用的是`deque`(可改)，`priority_queue`底层默认使用的是`vector` (可改)。但是**`queue`的底层不要使用`vector`**，因为`vector`头删效率低；**`priority_queue`的底层容器的迭代器要是随机访问迭代器**，因为建堆，向上调整，向下调整等等需要能随机访问。
 
-![image-20231113115806908](E:\Note\C++\stack && queue && priority_queue.assets\image-20231113115806908.png)
+![image-20231113115806908](E:\Note\C++\STL\stack && queue && priority_queue.assets\image-20231113115806908.png)
 
 `priority_queue`的第三个模板参数是一个仿函数，==用仿函数控制大堆小堆==！这是==泛型编程==的一个典型应用。
 
@@ -71,7 +71,7 @@
 
 `deque`底层是一段假想的连续空间，实际是分段连续的，为了维护其“整体连续”以及随机访问的假象，就由`deque`的迭代器实现，因此`deque`的迭代器设计就比较复杂，  
 
-![image-20231113214932231](E:\Note\C++\stack && queue && priority_queue.assets\image-20231113214932231.png)
+![image-20231113214932231](E:\Note\C++\STL\stack && queue && priority_queue.assets\image-20231113214932231.png)
 
 `deque`优点：一是==头插头删，尾插尾删效率高==，并且扩容效率也不差(比`vector`好)。二是存储空间“连续”，==空间利用率高==。
 

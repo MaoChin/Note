@@ -8,7 +8,7 @@
 
 根据**编码的不同**，有不同的`string`类！！不同的`string`类底层的字符类型是不同的，这就做到了一层抽象封装！
 
-·![image-20231102204555201](E:\Note\C++\String类.assets\image-20231102204555201.png)
+·![image-20231102204555201](E:\Note\C++\STL\String类.assets\image-20231102204555201.png)
 
 ## 2. `string`常用接口
 
@@ -16,11 +16,11 @@
 
 #### 1. 构造/拷贝构造
 
-![image-20231103210330211](E:\Note\C++\String类.assets\image-20231103210330211.png)
+![image-20231103210330211](E:\Note\C++\STL\String类.assets\image-20231103210330211.png)
 
 #### 2. 赋值重载
 
-![image-20231103210523007](E:\Note\C++\String类.assets\image-20231103210523007.png)
+![image-20231103210523007](E:\Note\C++\STL\String类.assets\image-20231103210523007.png)
 
 ### 2. 容量操作函数
 
@@ -85,8 +85,6 @@
 static const size_t npos = -1;
 ```
 
-
-
 ## 4. `string`类的模拟实现
 
 ### 1. 深浅拷贝
@@ -96,7 +94,7 @@ static const size_t npos = -1;
 1. 其中一个对象对其作了改变会影响另一个。
 2. **两个对象销毁时都会调用析构函数，释放两次同一块空间**，就会报错！！
 
-![image-20231016171607020](E:\Note\C++\string类.assets\image-20231016171607020.png)
+![image-20231016171607020](E:\Note\C++\STL\string类.assets\image-20231016171607020.png)
 
 **所以当类中有维护动态开辟的空间时，其==拷贝构造，赋值重载，析构==都要自己显示的实现，并且要以==深拷贝==的形式实现。**
 
