@@ -52,10 +52,61 @@ metaT1 = {};
 -- 将metaT1设置为t1的元表
 setmetatable(t1, metaT1);
 -- 设置__newindex是t2
-metaT1.__newindex = t2;
--- 此时这个phone在t2中！！！
+metaT1.__newindex = t2;    -- __newindex对应的value是一个表
+-- 1.若t1中没有key，此时这个phone在t2中！！！
 t1.phone = "1111";
 print(t1.phone);    -- nil
 print(t2.phone);    -- 1111
+
+-- 2.若t1中有key，则正常设置t1的
+t1.phone = "1111";
+
+metaT1.__newindex = function(t, key, value) ... end;-- 也可以是一个函数
+
+-- 防止死递归
+rawset(t, key, value);  -- 设置本表
+```
+
+## 4. `__tostring`
+
+把`table`类型转换成`string`类型。
+
+```lua
+t1 = {id = 1, name = "aa"};
+metaT1 = {};
+-- 将metaT1设置为t1的元表
+setmetatable(t1, metaT1);
+metaT1.__tostring = function(t)
+  ...
+  return str;
+end
+```
+
+## 5. `__call`
+
+默认函数调用。
+
+```lua
+t1 = {id = 1, name = "aa"};
+metaT1 = {};
+-- 将metaT1设置为t1的元表
+setmetatable(t1, metaT1);
+metaT1.__call = function(t, ...)
+  ...
+end
+
+-- 调用__call
+t1(1,2,3);
+```
+
+## 6. `rawget` && `rawset`
+
+`rawget`取本表`key`对应的`value`，不管元表的。
+
+`rawset`设置本表的`key`对应的`value`，不管元表。
+
+```lua
+rawget(t1, key);
+rawset(t1, key, value);
 ```
 
