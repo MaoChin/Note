@@ -39,7 +39,9 @@ coroutine.wrap(func);
 
 ## 3. 协程切换
 
+可以利用`resume`和`yield`函数进行协程切换。
 
+## 4. 生产者消费者模型
 
 
 

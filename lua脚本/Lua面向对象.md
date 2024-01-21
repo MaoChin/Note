@@ -1,6 +1,6 @@
 # `Lua`面向对象
 
-## 1. `self`(类似智能指针)
+## 1. `self`(类似`this`指针)
 
 ```lua
 t1 = {id = 1, name = "aaa"};
