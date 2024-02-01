@@ -27,6 +27,8 @@ gdb hello
 |                      |                                              |             |
 | `set var 变量名=val` | 自己手动设置变量值为 `val`                   |             |
 | `set args ...`       | 设置主程序的参数(`argc, argv[]`)             |             |
+|                      |                                              |             |
+| `x/FMT ADDRESS`      | 查看地址相关信息                             |             |
 
 ## `core dump`相关
 
