@@ -73,3 +73,27 @@ for str in fd:lines() do
 end  
 ```
 
+## 6. 文件加载相关操作
+
+#### 1. `load`
+
+```lua
+load(chunk, chunkname, mode, env) 
+-- 一般要assert返回值
+assert(load(chunk))()   -- 直接调用
+```
+
+返回一个函数调用，内容就是`chunk`的内容。
+
+#### 2. `loadstring`
+
+已经弃用。
+
+#### 3. `loadfile`   && `dofile`
+
+```lua
+loadfile(filename, mode, env) 
+dofile(filename) 
+```
+
+加载文件。
