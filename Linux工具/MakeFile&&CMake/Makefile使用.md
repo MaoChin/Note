@@ -1,18 +1,4 @@
-# `Makefile`  &&  `CMake`
-
-自动化编译工具。
-
-`Makefile`手写比较麻烦，所以出现了 `CMake`。`CMake`可以自动化生成`Makefile`文件。(就像C语言和汇编的关系)
-
-```shell
-cmake # 根据CMake文件得到Makefile文件
-make  # 根据Makefile 编译
-make install # 将make得到的动静态库自动拷贝到系统目录下
-```
-
-一些详细信息在目录：`E:\GithubInstall\Makefile\GNC-Tutorial` 中！
-
-
+# `Makefile`使用
 
 ## 1. 基本格式
 
@@ -54,13 +40,31 @@ clean:
 	rm -rf ...
 ```
 
-伪目标总是被执行的，可以避免 目标的取名和当前路径下的文件或文件夹重名而导致命令不被执行。
+伪目标==总是被执行的==，可以避免 目标的取名和当前路径下的文件或文件夹重名而导致命令不被执行。
 
 ## 4. 变量的定义和使用
 
+#### 1. 系统常量
+
+可以用 `make -p`查看，非常多！
+
 ```makefile
-cpp := src/main.cpp 
-obj := objs/main.o
+AS: as   汇编器
+CC: cc   c编译器
+CPP: cpp   预处理器
+CXX: g++
+RM: rm -f
+```
+
+使用系统常量的好处：跨平台！！
+
+#### 2. 自定义变量
+
+```makefile
+GCC = gcc
+CPP := src/main.cpp 
+OBJ := objs/main.o
+TARGET := calc
 
 # ()和{}都可以 
 $(obj) : ${cpp}
@@ -98,7 +102,7 @@ $(funcname argument argument ...)
 2. `subst`  字符串替换
 3. `patsubst`   模式字符串替换，就是可以使用通配符进行描述
 
-
+   
 
 
 
