@@ -52,3 +52,9 @@ default-character-set=utf8mb4
 
 5. 启动mysql服务器：`/etc/init.d/mysql`
 
+
+
+查看服务状态：`service mysql status`。包括重启之类的操作都是 `service ... restart/start/stop`
+
+==重要==：一般软件的配置文件所在目录：`/etc/....`；
+
