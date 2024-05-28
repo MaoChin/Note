@@ -10,13 +10,13 @@
 
 若不使用插件，每次更改代码都需要重新打包，并把`war`包拷贝到`Tomcat`目录下，比较麻烦；使用插件后只需要更改代码然后重新运行即可。
 
-![image-20240526212424096](E:\Note\Java\IDEA使用.assets\image-20240526212424096.png)
+![](E:\Note\Java\IDEA使用\IDEA使用.assets\image-20240526212424096.png)
 
 ### 2. Maven Help
 
 帮助进行 依赖分析和依赖排除。
 
-![image-20240526204542140](E:\Note\Java\IDEA使用.assets\image-20240526204542140.png)
+![](E:\Note\Java\IDEA使用\IDEA使用.assets\image-20240526204542140.png)
 
 ### 3. Spring Boot Helper
 
@@ -25,4 +25,8 @@
 ### 4. IdeaVim
 
 不多说。
+
+### 5. EditStarters
+
+在spring项目中的pom文件中可以自动添加依赖，不用自己在 maven repository 网站中找。
 

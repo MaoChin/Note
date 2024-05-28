@@ -115,9 +115,11 @@ ip:port/.../...?username=aaa&password=111
 
 #### 2. `Servlet`中的`session`和`cookie`
 
+==`http`是无状态的==，但有时是需要我们保存一些信息的，这时就涉及到cookie和session。
+
 `cookie`：浏览器持久化存储数据的一种机制（==`cookie`存在客户端浏览器==），使用键值对格式保存数据。服务器要使用`cookie`完成业务逻辑。
 
-一般在服务端可以通过`cookie`从数据库中拿到更多的信息，在把这些信息加载到内存中，这些加载到内存中的信息就是`session`。（==`session`存在服务端 内存中==，不是持久化的）
+一般在服务端可以通过`cookie`从数据库中拿到更多的信息，在把这些信息加载到内存中，这些加载到内存中的信息就是`session`。（==`session`存在服务端 内存中==，不是持久化的，但是可以配置持久化）
 
 正是因为如此，`cookie`也可以理解为`sessionId`（或者说`cookie` 中存有`sessionId`），通过`sessionId`可以拿到`session`。服务端有很多的`session`。
 
