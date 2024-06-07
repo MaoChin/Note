@@ -30,3 +30,7 @@
 
 在spring项目中的pom文件中可以自动添加依赖，不用自己在 maven repository 网站中找。
 
+### 6. MyBatisX
+
+一款`MyBatisPlus`的插件，也可以用在`MyBatis`中。
+

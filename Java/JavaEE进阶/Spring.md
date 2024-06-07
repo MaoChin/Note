@@ -4,6 +4,9 @@
 
 `spring`一般指`spring`全家桶，包括`Spring MVC`（专门写`Web`程序的框架）等，是为了简化`Java`开发搞的，而`SpringBoot`是为了简化`spring`使用，可以方便的创建`Spring MVC`等项目。
 
+总结：**SpringMVC和SpringBoot都属于Spring，SpringMVC是基于Spring的一个
+MVC框架，而SpringBoot是基于Spring的一套快速开发整合包。**
+
 ## 1. 一个`Spring MVC` 项目的目录 
 
 ![image-20240526221543495](E:\Note\Java\JavaEE进阶\Spring.assets\image-20240526221543495.png)
@@ -53,7 +56,7 @@
 ##### 响应
 
 ```java
-@ResponseBody     (返回值是前端需要的数据)
+@ResponseBody     (返回值是前端需要的数据，而不是页面)
 ```
 
 当返回值是 String 这些类型时，返回值的 content-type 就是 test/html
@@ -62,7 +65,11 @@
 
 除了自动识别外，如果想要自己设置 返回值的  content-type，是通过@RequestMapping 注解中的变量设置的。
 
-## 4. 应用分层
+## 4. Spring 程序的编译运行
+
+一样的需要打成 `.jar` 包，（注意在Tomcat那里是打成 `.war`包），然后直接在命令行运行即可：`java -jar xxx.jar`。
+
+## 5. 应用分层
 
 ![image-20240528155238206](E:\Note\Java\JavaEE进阶\Spring.assets\image-20240528155238206.png)
 
