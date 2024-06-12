@@ -42,3 +42,5 @@ logging:
         file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i	
 ```
 
+#### Linux下跟踪日志的命令：==tail -f xxx.log | grep "ERROR"==
+

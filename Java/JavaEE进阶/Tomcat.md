@@ -165,3 +165,9 @@ ip:port/.../...?username=aaa&password=111
 | String getName()               | 该方法返回 cookie 的名称。名称在创建后不能改变。(这个值是 Set Cooke 字段设置给浏览器的) |
 | String getValue()              | 该方法获取与 cookie 关联的值                                 |
 | void setValue(String newValue) | 该方法设置与 cookie 关联的值。                               |
+
+## 3. token
+
+`cookie`和`session`是`session`存在服务端，并把`sessionId`返回给客户端，客户端把`sessionId`存在`cookie`中。
+
+`token`方式：服务端生成`token`，返回给客户端；后续客户端访问时携带`token`就可以了（一般在`http`请求的`header`中），服务端可以校验`token`的合法性！！！==`token`不是加密，只是不能被伪造。==	
