@@ -58,3 +58,8 @@ default-character-set=utf8mb4
 
 ==重要==：一般软件的配置文件所在目录：`/etc/....`；
 
+### Linux 发行版
+
+`Debian` && `Ubuntu` --- `apt`
+
+ 
