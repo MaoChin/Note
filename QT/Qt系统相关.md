@@ -42,15 +42,17 @@ Qt中在进行窗口程序的处理过程中，经常要周期性的执行某些
 
 ## 3. Qt多线程
 
-在Qt中，多线程的处理是通过`QThread`类来实现。
+在Qt中，多线程的处理是通过`QThread`类来实现。和 事件 的机制差不多，也是自己创建一个`Thread`对象继承`QThread`类，然后**重写`run`函数，利用多态实现**！！
 
-自己创建的线程函数内部不允许操作UI图形界面，一般用数据处理。  
+自己创建的线程函数内部不允许操作UI图形界面，一般用数据处理，**UI界面的操作只能由主线程进行，防止线程安全问题！！**
+
+在服务端多线程主要是为了充分利用硬件资源，提升整体性能；但是客户端的多线程主要是为了==提升用户体验==，比如把耗时的I/O操作交给另一个线程（被挂起），这样主线程可以持续提供服务！
 
 #### 线程安全
 
 实现线程互斥和同步常用的类有：
 
-1. 互斥锁：`QMutex`、`QMutexLocker`  
+1. 互斥锁：`QMutex`、`QMutexLocker` （使用RAII思想控制锁的释放 ，类似C++中的`lock_guard`） 
 2. 条件变量：`QWaitCondition`  
 3. 信号量：`QSemaphore`  
 4. 读写锁：`QReadLocker`、`QWriteLocker`、`QReadWriteLock`  
@@ -59,13 +61,21 @@ Qt中在进行窗口程序的处理过程中，经常要周期性的执行某些
 
 和多线程类似，Qt为了支持跨平台，对网络编程的API也进行了重新封装。
 
+使用网络API时需要引入网络模块，**Qt有很多很多模块，只是在用到某个模块时才引入这个模块**，减少开销！（默认引入了`QtCore`模块，包含了信号槽，常用控件这些内容）
+
 ### 4.1 `UDP Socket`    
 
 主要的类有两个：`QUdpSocket` 和 `QNetworkDatagram`   
 
 ### 4.2 `TCP Socket`
 
-核心类是两个： `QTcpServer` 和 `QTcpSocke’t`     
+核心类是两个： `QTcpServer`（负责建立连接） 和 `QTcpSocket` （负责数据交互）
+
+每个客户端服务器的连接都有一个`QTcpSocket`对象，所以==服务端会有大量的`QTcpSocket`对象，在连接断开时别忘了释放==！！（通过函数`deleteLater()`）
+
+### 4.3 `HTTP`
+
+关键类主要是三个.：`QNetworkAccessManager` , `QNetworkRequest` , `QNetworkReply`   
 
 ## 5. Qt音视频
 
