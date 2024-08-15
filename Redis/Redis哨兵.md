@@ -109,3 +109,5 @@ student:
 
 确定好了新的主节点后， `leader`节点就会让该节点执行 `slave no one`成为 `master`节点；然后让其他所有的从节点 执行 `slaveof 新主节点ip 新主节点port` 依附于这个新的主节点。
 
+
+
