@@ -13,7 +13,7 @@
 
 `Short Packet Header` 中的 `Packet Number` 是每个报文独一无二的编号，它是**严格递增**的，也就是说就算 `Packet N` 丢失了，重传的 `Packet N` 的 `Packet Number` 已经不是 `N`，而是一个比 `N` 大的值。
 
-![image-20240312171131908](D:\MyNote\网络\传输层\TCP缺陷与QUIC.assets\image-20240312171131908.png)
+![image-20240312171131908](E:\Note\网络\传输层\TCP缺陷与QUIC.assets\image-20240312171131908.png)
 
 `TCP` 在重传报文时的序列号和原始报文的序列号是一样的，也正是由于这个特性，引入了 `TCP` 重传的歧义问题：
 
