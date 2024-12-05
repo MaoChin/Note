@@ -120,3 +120,7 @@ import java.util.Arrays;
 import static java.lang.System.*;
 ```
 
+## 10. 一些细节
+
+1. 在`JVM`以上`java`代码中，没有任何办法可以获取到“内存地址”！！！直接打印数组得到的并不是地址，而是 `hashCode`值。
+2. `java`中一个字符（char）是两个字节，固定使用`unicode`编码；而`String`的编码是可配置的，默认一般都是UTF-8。在`char`和`String`之间相互转换的时候会自动进行字符编码的转换。

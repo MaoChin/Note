@@ -42,7 +42,7 @@ public enum TestEnum {
 
 基本格式：`(parameters) -> expression` 或 `(parameters) ->{ statements; }  `
 
-
+变量捕获：`java`中的`lambda`表达式可以自动捕获上一层作用域的局部变量，但是只能捕获常量（`final`修饰）或者初始化后没有再被修改的变量！！
 
 
 
