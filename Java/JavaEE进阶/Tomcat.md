@@ -2,7 +2,7 @@
 
 一个`Java`编写的`HTTP`服务器，既能支持静态页面，也能支持动态页面。
 
-动态页面：可以根据不同的用户或不同的输入展示不同的页面。为了能够支持动态页面，`Tomcat`提供了一组`API`，封装了`HTTP`协议，这一组`API`就是`Servlet`。
+动态页面：可以根据不同的用户或不同的输入展示不同的页面。为了能够支持动态页面，==`Tomcat`提供了一组`API`，封装了`HTTP`协议，这一组`API`就是`Servlet`。==可以认为`Tomcat`封装了`Servlet`。								
 
 `Tomcat`启动时需要的端口：8080（业务端口），8005（管理端口）
 
@@ -168,6 +168,6 @@ ip:port/.../...?username=aaa&password=111
 
 ## 3. token
 
-`cookie`和`session`是`session`存在服务端，并把`sessionId`返回给客户端，客户端把`sessionId`存在`cookie`中。
+`cookie`存在客户端，`session`存在服务端，并把`sessionId`返回给客户端，客户端把`sessionId`存在`cookie`中。
 
 `token`方式：服务端生成`token`，返回给客户端；后续客户端访问时携带`token`就可以了（一般在`http`请求的`header`中），服务端可以校验`token`的合法性！！！==`token`不是加密，只是不能被伪造。==	
