@@ -60,26 +60,40 @@
 ==消息丢失是消息队列面临的一个重要问题==，消息丢失主要有三种方式：
 
 1. 生产者没有正确将消息发送到`broker`（比如网络等原因）。
-2. `broker`没有将消息保存好导致消息丢失。
+2. `broker`没有将消息保存好导致消息丢失（通过持久化机制解决）。
 3. `broker`将消息发送给了消费者然后将消息删除，但是消费者并没有收到消息。
 
-`Publisher Confirms`主要是解决上述问题1的，即生产者到`broker`这一段。
+`Publisher Confirms`主要是解决上述问题1的，即生产者到`broker`这一段。后面两种问题的解决见特性（一）笔记。
 
-`Publisher Confirms`主要有三种策略：
+`Publisher Confirms`有两个方式，一是`confirm`确认，二是`return`回退：
+
+##### `confirm`确认
+
+==生产者到`Exchange`阶段。==
+
+生产者在发送消息时设置`ConfirmCallback`的监听，`Exchange`接收成功/失败会发送`Ack/Nack`回来，然后生产者进行回调处理。主要有三种确认策略：
 
 ##### 1. `Publishing Messages Individually`(单独确认)  
 
-单条消息的确认应答，等待确认时消费者会阻塞等待（同步的）。
+单条消息的确认应答，等待确认时生产者会阻塞等待（同步的）。
 
 ##### 2. `Publishing Messages in Batches`(批量确认)  
 
-类似`TCP`的滑动窗口，批量消息的确认应答，等待确认时消费者会阻塞等待（同步的）。但是是一次等待确认多条消息。
+类似`TCP`的滑动窗口，批量消息的确认应答，等待确认时生产者会阻塞等待（同步的）。但是是一次等待确认多条消息。
 
-##### 3. 
+##### 3. `Handling Publisher Confirms Asynchronously`(异步确认)  
 
+生产者会==异步的==监听并处理`broker`返回的`ack/nack` 信息。
 
+`deliveryTag` 表示发送消息的序号，`multiple` 表示是否批量确认。  
 
+##### `return`回退
 
+==`Exchange`到`Queue`的路由阶段。==
+
+当消息无法路由到`Queue`时设置的回调，方便生产者进行相应的处理。（比如没有队列与消息的`Routing Key`匹配或队列不存在等）
+
+#### 8. `SpringBoot`集成`RabbitMQ`
 
 
 
