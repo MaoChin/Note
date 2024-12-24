@@ -22,14 +22,14 @@ svn://localhost/test1
 
 1. `authz`文件是授权文件，告知哪些用户具有哪些权限：
 
-![image-20240226224229872](D:\MyNote\版本控制工具\svn\svn多仓库与权限控制.assets\image-20240226224229872.png)
+![image-20240226224229872](E:\Note\版本控制工具\svn\svn多仓库与权限控制.assets\image-20240226224229872.png)
 
 2. `passwd`文件是认证文件，标识当前svn系统中 对于某个仓库 有哪些用户以及对应的密码：
 
-![image-20240226224119763](D:\MyNote\版本控制工具\svn\svn多仓库与权限控制.assets\image-20240226224119763.png)
+![image-20240226224119763](E:\Note\版本控制工具\svn\svn多仓库与权限控制.assets\image-20240226224119763.png)
 
 3. `svnserver.conf`文件是通用配置文件，默认情况下上面两个配置是关闭的，需要在`svnserver.conf`文件中配置开启：
 
-   ![image-20240226224613720](D:\MyNote\版本控制工具\svn\svn多仓库与权限控制.assets\image-20240226224613720.png)
+   ![image-20240226224613720](E:\Note\版本控制工具\svn\svn多仓库与权限控制.assets\image-20240226224613720.png)
 
 ​		

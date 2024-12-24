@@ -35,7 +35,7 @@ svnadmin create D:\svn_learning\svnserver\test  # (自己指定路径)
 
 创建成功后在对应目录下有六个文件/文件夹：
 
-![image-20240224164726554](D:\MyNote\版本控制工具\svn\svn初识.assets\image-20240224164726554.png)
+![image-20240224164726554](E:\Note\版本控制工具\svn\svn初识.assets\image-20240224164726554.png)
 
 #### 2. 进行服务端监管
 
