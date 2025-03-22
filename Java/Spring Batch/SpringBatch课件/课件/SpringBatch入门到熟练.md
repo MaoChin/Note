@@ -770,7 +770,7 @@ public Job job(){
 }
 ```
 
-这里要注意，**必须贴上@StepScope** ，表示在启动项目的时候，不加载该Step步骤bean，等step1()被调用时才加载。这就是所谓延时获取。
+这里要注意，**必须贴上@StepScope** ，表示在启动项目的时候，先不加载被StepScope修饰的bean，~~等step1()被调用时才加载。这就是所谓延时获取。~~等到Step1方法内部调用到被StepScope修饰bean时才加载。也就是延时获取。
 
 
 
@@ -3144,7 +3144,7 @@ public class FlowStepJob {
 2022-12-03 14:54:17.215  INFO 19116 --- [           main] o.s.batch.core.step.AbstractStep         : Step: [stepC] executed in 50ms
 ```
 
-使用FlowStep的好处在于，在处理复杂额批处理逻辑中，flowStep可以单独实现一个子步骤流程，为批处理提供更高的灵活性。
+使用FlowStep的好处在于，在处理复杂的批处理逻辑中，flowStep可以单独实现一个子步骤流程，为批处理提供更高的灵活性。
 
 
 
@@ -3195,8 +3195,8 @@ batch_job_execution_context用于保存JobContext对应的ExecutionContext对象
 | 字段               | 描述                                 |
 | ------------------ | ------------------------------------ |
 | JOB_EXECUTION_ID   | job执行对象主键                      |
-| SHORT_CONTEXT      | ExecutionContext系列化后字符串缩减版 |
-| SERIALIZED_CONTEXT | ExecutionContext系列化后字符串       |
+| SHORT_CONTEXT      | ExecutionContext序列化后字符串缩减版 |
+| SERIALIZED_CONTEXT | ExecutionContext序列化后字符串       |
 
 ## 7.4 batch_job_execution_params表
 
@@ -3215,9 +3215,9 @@ batch_job_execution_context用于保存JobContext对应的ExecutionContext对象
 | DOUBLE_VAL       | 当参数类型为DOUBLE时有值       |
 | IDENTIFYING      | 用于标记该参数是否为标识性参数 |
 
-## 7.5 btch_step_execution表
+## 7.5 batch_step_execution表
 
-作业启动，执行步骤，每个步骤执行信息保存在tch_step_execution表中
+作业启动，执行步骤，每个步骤执行信息保存在batch_step_execution表中
 
 *![image-20221203165722670](images/image-20221203165722670.png)*
 
@@ -3239,7 +3239,7 @@ batch_job_execution_context用于保存JobContext对应的ExecutionContext对象
 | WRITE_SKIP_COUNT   | 由于ItemWriter中抛出异常而跳过的条目数量    |
 | ROLLBACK_COUNT     | 在步骤执行中被回滚的事务数量                |
 | EXIT_CODE          | 步骤的退出码                                |
-| EXT_MESSAGE        | 步骤执行返回的信息                          |
+| EXIT_MESSAGE       | 步骤执行返回的信息                          |
 | LAST_UPDATE        | 最后一次更新记录时间                        |
 
 
@@ -3540,16 +3540,6 @@ public class HelloController {
 
 
 
-
-
-
-
-
-
-
-
-
-
 ## 8.2 作业停止
 
 作业的停止，存在有3种情况：
@@ -3815,7 +3805,7 @@ if(ResouceCount.readCount != ResouceCount.totalCount){
 }
 ```
 
-其中的StepExecution#setTerminateOnly() 给运行中的stepExecution设置停止标记，Spring Batch 识别后直接停止步骤，进而停止流程
+其中的StepExecution.setTerminateOnly() 给运行中的stepExecution设置停止标记，Spring Batch 识别后直接停止步骤，进而停止流程
 
 job() 改动
 
@@ -4315,14 +4305,14 @@ public class UserFieldMapper implements FieldSetMapper<User> {
     public User mapFieldSet(FieldSet fieldSet) throws BindException {
 
         //自己定义映射逻辑
-        User User = new User();
-        User.setId(fieldSet.readLong("id"));
-        User.setAge(fieldSet.readInt("age"));
-        User.setName(fieldSet.readString("name"));
+        User user = new User();
+        user.setId(fieldSet.readLong("id"));
+        user.setAge(fieldSet.readInt("age"));
+        user.setName(fieldSet.readString("name"));
         String addr = fieldSet.readString("province") + " "
                 + fieldSet.readString("city") + " " + fieldSet.readString("area");
-        User.setAddress(addr);
-        return User;
+        user.setAddress(addr);
+        return user;
     }
 }
 ```
@@ -4549,7 +4539,7 @@ Spring Batch 提供2种从数据库中读取数据的方式：
 
 *![image-20221205155534928](images/image-20221205155534928.png)*
 
-游标是数据库中概念，可以简单理解为一个指针
+游标是数据库中概念，可以简单理解为一个指针。（一条一条读）
 
 *![image-20221205152543915](images/image-20221205152543915.png)*
 
