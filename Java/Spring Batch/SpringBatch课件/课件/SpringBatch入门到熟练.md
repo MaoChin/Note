@@ -7349,6 +7349,8 @@ public class JobController {
 
 **需求：使用分区的方式将employee_temp表的数据读取并写入到employee表**
 
+![image-20250327234341790](E:\Note\Java\Spring Batch\SpringBatch课件\课件\SpringBatch入门到熟练.assets\image-20250327234341790.png)
+
 步骤1：在com.langfeiyes.exp.job.config 包添加DBToDBJobConfig， 配置从数据库到数据库的作业
 
 ```java
